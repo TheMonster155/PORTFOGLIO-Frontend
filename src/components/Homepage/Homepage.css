@@ -1,0 +1,9 @@
+/* Aggiungi animazioni per le frasi */
+.text-up {
+    animation: slide-up 2s ease-out forwards;
+  }
+  
+  .text-down {
+    animation: slide-down 2s ease-out forwards;
+  }
+  

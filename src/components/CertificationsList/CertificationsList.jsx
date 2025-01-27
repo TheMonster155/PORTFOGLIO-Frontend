@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCertifications } from "../../reducers/certificationsSlice";
 import {
@@ -7,6 +6,83 @@ import {
   isCertificateLoading,
 } from "../../reducers/certificationsSlice";
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+
+const AnimatedBackground = () => {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    let animationFrame;
+
+    const generateRandomLine = () => {
+      const randomLines = [
+        "const user = 'Jouttane Anass';",
+        "let code = 'Hello World!';",
+        "function animateCode() { return true; }",
+        "const react = require('react');",
+        "let state = useState();",
+        "const canvas = document.querySelector('canvas');",
+        "if (window.innerWidth < 800) { console.log('Mobile'); }",
+      ];
+      return randomLines[Math.floor(Math.random() * randomLines.length)];
+    };
+
+    const draw = () => {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const time = Date.now() / 1000;
+      const lineColor = "rgba(0, 255, 255, 0.3)";
+
+      const totalLines = 150;
+
+      for (let i = 0; i < totalLines; i++) {
+        const yPos = Math.random() * canvas.height;
+        const xOffset = (time * 2 + i * 30) % canvas.width;
+        const codeLine = generateRandomLine();
+
+        ctx.font = "16px monospace";
+        ctx.fillStyle = lineColor;
+        ctx.fillText(codeLine, xOffset, yPos);
+      }
+
+      animationFrame = requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      window.removeEventListener("resize", resizeCanvas);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        zIndex: -1,
+        pointerEvents: "none",
+      }}
+    />
+  );
+};
 
 // Funzione per generare un ritardo per le animazioni
 const getSequenceDelay = (index) => index * 0.2; // Incrementa il ritardo in base all'indice
@@ -30,7 +106,8 @@ const CertificationsList = () => {
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black">
+    <div className="flex flex-col items-center justify-center min-h-screen  ">
+      <AnimatedBackground />
       <div className="w-full p-0">
         <h2 className="text-3xl font-bold mb-6 text-center text-white">
           Certifications
@@ -57,7 +134,6 @@ const CertificationsList = () => {
                       isOdd ? "flex-row-reverse" : "flex-row"
                     } items-center space-x-6 w-full`}
                   >
-                    {/* Posizionamento immagine */}
                     <motion.div
                       className={`w-1/3 ${isOdd ? "ml-auto" : "mr-auto"}`}
                       initial={{ opacity: 0, x: isOdd ? 50 : -50 }}
@@ -76,7 +152,6 @@ const CertificationsList = () => {
                       />
                     </motion.div>
 
-                    {/* Contenuto descrizione */}
                     <motion.div
                       className="flex-1"
                       initial="hidden"
@@ -103,7 +178,7 @@ const CertificationsList = () => {
                         {certification.name}
                       </motion.h3>
                       <motion.p
-                        className="text-gray-400 mb-4"
+                        className=" text-white mb-4"
                         variants={{
                           hidden: { opacity: 0, y: 20 },
                           visible: { opacity: 1, y: 0 },
@@ -112,7 +187,7 @@ const CertificationsList = () => {
                         {certification.description}
                       </motion.p>
                       <motion.p
-                        className="font-medium text-gray-300"
+                        className="font-medium  text-white "
                         variants={{
                           hidden: { opacity: 0, y: 20 },
                           visible: { opacity: 1, y: 0 },

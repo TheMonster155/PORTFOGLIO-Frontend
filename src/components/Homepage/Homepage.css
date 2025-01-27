@@ -1,9 +1,79 @@
-/* Aggiungi animazioni per le frasi */
-.text-up {
-    animation: slide-up 2s ease-out forwards;
+@import url('https://fonts.googleapis.com/css2?family=Jersey+15&display=swap');
+
+.second-section {
+  font-family: "Jersey 15", serif;
+  position: relative;
+}
+
+
+.about-me {
+  font-family: "Jersey 15", serif;
+  font-size: 10rem !important;
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: bounceAnimation 1s ease-out;
+}
+
+.skills-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  animation: bounceAnimation 1s ease-out;
+  font-family: "Jersey 15", serif;
+  font-size: 10rem !important;
+}
+
+.third-section{
+  font-family: "Jersey 15", serif;
+  position: relative;
+}
+@keyframes bounceAnimation {
+  0% {
+    transform: scale(1);
   }
-  
-  .text-down {
-    animation: slide-down 2s ease-out forwards;
+  50% {
+    transform: scale(1.2);
   }
-  
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Animazione per nascondere "About Me" al clic */
+.fadeOut {
+  animation: fadeOut 0.6s ease-out forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.6s ease-out forwards;
+}

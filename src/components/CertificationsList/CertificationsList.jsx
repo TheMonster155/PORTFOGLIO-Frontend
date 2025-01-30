@@ -6,7 +6,9 @@ import {
   isCertificateLoading,
 } from "../../reducers/certificationsSlice";
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowLeftIcon } from "@heroicons/react/solid";
+import { useNavigate } from "react-router-dom";
 
 const AnimatedBackground = () => {
   const canvasRef = useRef(null);
@@ -84,30 +86,47 @@ const AnimatedBackground = () => {
   );
 };
 
-// Funzione per generare un ritardo per le animazioni
-const getSequenceDelay = (index) => index * 0.2; // Incrementa il ritardo in base all'indice
+const getSequenceDelay = (index) => index * 0.2;
 
 const CertificationsList = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // Selezioniamo lo stato dal Redux store
   const certifications = useSelector(getAllCertificate);
   const isLoading = useSelector(isCertificateLoading);
   const error = useSelector(certificateError);
 
-  // Effettua il dispatch dell'azione per recuperare le certificazioni quando il componente è montato
+  const [isImageModalOpen, setImageModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
+
   useEffect(() => {
     dispatch(fetchCertifications());
   }, [dispatch]);
 
-  // Gestione dei casi di loading e errore
   if (isLoading)
     return <p className="text-center text-xl text-white">Loading...</p>;
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
+  const openImageModal = (image) => {
+    setSelectedImage(image);
+    setImageModalOpen(true);
+  };
+
+  const closeImageModal = () => {
+    setImageModalOpen(false);
+    setSelectedImage("");
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen  ">
+    <div className="flex flex-col items-center justify-center min-h-screen">
       <AnimatedBackground />
+
+      <div className="absolute top-5 left-4">
+        <button onClick={() => navigate("/")} className="text-white text-xl">
+          <ArrowLeftIcon className="h-6 w-6 text-white" />
+        </button>
+      </div>
+
       <div className="w-full p-0">
         <h2 className="text-3xl font-bold mb-6 text-center text-white">
           Certifications
@@ -115,7 +134,7 @@ const CertificationsList = () => {
         {certifications.length > 0 ? (
           <div className="grid grid-cols-1 gap-6">
             {certifications.map((certification, index) => {
-              const isOdd = index % 2 !== 0; // Verifica se è una posizione dispari per alternare le immagini
+              const isOdd = index % 2 !== 0;
               return (
                 <motion.div
                   key={certification._id}
@@ -148,7 +167,8 @@ const CertificationsList = () => {
                       <img
                         src={certification.file}
                         alt={certification.name}
-                        className="object-cover mb-4 rounded-md"
+                        className="object-cover mb-4 rounded-md cursor-pointer"
+                        onClick={() => openImageModal(certification.file)}
                       />
                     </motion.div>
 
@@ -178,7 +198,7 @@ const CertificationsList = () => {
                         {certification.name}
                       </motion.h3>
                       <motion.p
-                        className=" text-white mb-4"
+                        className="text-white mb-4"
                         variants={{
                           hidden: { opacity: 0, y: 20 },
                           visible: { opacity: 1, y: 0 },
@@ -187,7 +207,7 @@ const CertificationsList = () => {
                         {certification.description}
                       </motion.p>
                       <motion.p
-                        className="font-medium  text-white "
+                        className="font-medium text-white"
                         variants={{
                           hidden: { opacity: 0, y: 20 },
                           visible: { opacity: 1, y: 0 },
@@ -208,6 +228,24 @@ const CertificationsList = () => {
           </p>
         )}
       </div>
+
+      {isImageModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+          <div className="relative bg-white p-4 rounded-md">
+            <button
+              onClick={closeImageModal}
+              className="absolute top-0 right-0 p-2 text-xl text-black"
+            >
+              &times;
+            </button>
+            <img
+              src={selectedImage}
+              alt="Enlarged"
+              className="max-w-full max-h-[90vh] object-contain"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

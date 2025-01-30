@@ -7,7 +7,6 @@ const CodeRainBackground = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
-    // Imposta dimensioni canvas
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -17,23 +16,18 @@ const CodeRainBackground = () => {
     const drops = Array.from({ length: columns }).fill(1);
 
     function draw() {
-      // Sfondo semi-trasparente per creare l'effetto di dissolvenza
       ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Stile dei caratteri
-      ctx.fillStyle = "#0F0"; // Verde stile Matrix
+      ctx.fillStyle = "#0F0";
       ctx.font = `${fontSize}px monospace`;
 
       drops.forEach((y, i) => {
-        // Seleziona un carattere casuale dal set
         const text = codes[Math.floor(Math.random() * codes.length)];
         const x = i * fontSize;
 
-        // Disegna il carattere sul canvas
         ctx.fillText(text, x, y * fontSize);
 
-        // Resetta il drop casualmente per creare un effetto dinamico
         if (y * fontSize > canvas.height && Math.random() > 0.975) {
           drops[i] = 0;
         }
@@ -41,7 +35,6 @@ const CodeRainBackground = () => {
       });
     }
 
-    // Aggiorna il canvas ogni 50ms
     const interval = setInterval(draw, 50);
 
     return () => clearInterval(interval);

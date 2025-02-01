@@ -1,83 +1,24 @@
-import React, { useEffect, useRef } from "react";
-import "./AboutME.css";
-const CodeRainBackground = () => {
-  const canvasRef = useRef(null);
+import React from "react";
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const codes = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&*";
-    const fontSize = 16;
-    const columns = canvas.width / fontSize;
-    const drops = Array.from({ length: columns }).fill(1);
-
-    function draw() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = "#0F0";
-      ctx.font = `${fontSize}px monospace`;
-
-      drops.forEach((y, i) => {
-        const text = codes[Math.floor(Math.random() * codes.length)];
-        const x = i * fontSize;
-
-        ctx.fillText(text, x, y * fontSize);
-
-        if (y * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
-      });
-    }
-
-    const interval = setInterval(draw, 50);
-
-    return () => clearInterval(interval);
-  }, []);
-
+const About = () => {
   return (
-    <canvas
-      ref={canvasRef}
-      style={{ position: "absolute", top: 0, left: 0, zIndex: -1 }}
-    />
-  );
-};
-
-const AboutMe = () => {
-  return (
-    <div className="relative w-screen h-screen overflow-hidden">
-      <CodeRainBackground />
-
-      <div className="absolute inset-0 flex items-center justify-center z-10 bg-black bg-opacity-60">
-        <div className="text-center text-white">
-          <h2>
-            Ciao, mi chiamo Anass. Sono nato e cresciuto a Bolzano, in Alto
-            Adige, ma da otto anni vivo in Germania, nella città di Lauingen in
-            Baviera. Sono uno sviluppatore full-stack con una forte passione per
-            la creazione di esperienze web intuitive e funzionali. Fin da
-            giovane, ho nutrito un grande interesse per la tecnologia e
-            l'informatica, un entusiasmo che mi ha spinto a iscrivermi a
-            EPICODE, una delle migliori scuole di programmazione online in
-            Italia. Durante il mio percorso formativo, ho approfondito le
-            competenze nel front-end, lavorando con JavaScript, e nel back-end,
-            specializzandomi nello stack MERN (MongoDB, Express.js, React e
-            Node.js). Oggi, continuo a crescere professionalmente come
-            autodidatta, concentrandomi su Python e sulla progettazione di siti
-            web moderni e performanti. Sono sempre entusiasta di lavorare su
-            nuovi progetti e collaborare con team che condividano la mia
-            passione per il web development. Se vuoi scoprire di più su di me o
-            discutere di una possibile collaborazione, non esitare a
-            contattarmi!{" "}
-          </h2>
-        </div>
-      </div>
+    <div className="bg-transparent text-white p-6 mt-4 space-y-4">
+      <p className="text-2xl sm:text-1xl md:text-5xl lg:text-4xl xl:text-4xl leading-relaxed">
+        Hi, I'm Anass. I'm a Full Stack Web Developer with the goal of
+        transforming ideas into unique and functional digital experiences. My
+        passion for technology is reflected in every project I create, always
+        striving to combine functionality and design. I enjoy exploring new
+        solutions and tackling challenges that push me to grow professionally.
+        Whether developing interactive websites with JavaScript, React, and CSS,
+        or creating scalable backend solutions with Node.js, Express, and
+        MongoDB, my approach is always results-oriented and detail-focused.
+        Every line of code I write aims not only to solve a problem but also to
+        provide a smooth and engaging user experience. If you're looking for a
+        dynamic professional who pays attention to project needs and can quickly
+        adapt, I'm ready to collaborate with you
+      </p>
     </div>
   );
 };
 
-export default AboutMe;
+export default About;

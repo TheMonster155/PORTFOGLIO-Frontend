@@ -46,12 +46,12 @@ const ContactPage = () => {
     <div className="relative w-full min-h-screen flex justify-center items-center px-4 py-8 sm:py-0">
       <div className="bg-gray-800 p-6 sm:p-8 rounded-lg shadow-lg w-full max-w-lg">
         <h2 className="text-center text-white text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
-          Contattaci
+          Contact Us
         </h2>
         <p className="text-center text-gray-300 text-sm sm:text-base mb-4 sm:mb-6">
-          Hai domande, un progetto da proporre o semplicemente vuoi entrare in
-          contatto? Compila il modulo per inviarmi un messaggio. Risponderò al
-          più presto!
+          Do you have questions, a project to propose, or simply want to get in
+          touch? Fill out the form to send me a message. I will reply as soon as
+          possible!
         </p>
 
         <div className="flex justify-center gap-4 mt-2 sm:mt-4">
@@ -79,18 +79,18 @@ const ContactPage = () => {
               htmlFor="formEmail"
               className="block text-gray-300 mb-1 sm:mb-2"
             >
-              Indirizzo Email
+              Email Address
             </label>
             <input
               type="email"
               className="w-full p-2 sm:p-3 rounded-md border border-gray-600 bg-gray-700 text-white"
               id="formEmail"
-              placeholder="Inserisci la tua email"
+              placeholder="Enter your email"
               {...register("email", {
-                required: "L'indirizzo email è obbligatorio",
+                required: "Email address is required",
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Indirizzo email non valido",
+                  message: "Invalid email address",
                 },
               })}
             />
@@ -106,15 +106,15 @@ const ContactPage = () => {
               htmlFor="formSubject"
               className="block text-gray-300 mb-1 sm:mb-2"
             >
-              Oggetto
+              Subject
             </label>
             <input
               type="text"
               className="w-full p-2 sm:p-3 rounded-md border border-gray-600 bg-gray-700 text-white"
               id="formSubject"
-              placeholder="Inserisci l'oggetto"
+              placeholder="Enter the subject"
               {...register("subject", {
-                required: "L'oggetto è obbligatorio",
+                required: "Subject is required",
               })}
             />
             {errors.subject && (
@@ -129,15 +129,15 @@ const ContactPage = () => {
               htmlFor="formMessage"
               className="block text-gray-300 mb-1 sm:mb-2"
             >
-              Messaggio
+              Message
             </label>
             <textarea
               className="w-full p-2 sm:p-3 rounded-md border border-gray-600 bg-gray-700 text-white"
               id="formMessage"
               rows="3"
-              placeholder="Scrivi il tuo messaggio qui"
+              placeholder="Write your message here"
               {...register("message", {
-                required: "Il messaggio è obbligatorio",
+                required: "Message is required",
               })}
             />
             {errors.message && (
@@ -152,7 +152,7 @@ const ContactPage = () => {
             className="w-full p-2 sm:p-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Invio..." : "Invia Messaggio"}
+            {isSubmitting ? "Sending..." : "Send Message"}
           </button>
         </form>
       </div>

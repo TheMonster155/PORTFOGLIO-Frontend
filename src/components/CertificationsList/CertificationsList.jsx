@@ -9,83 +9,8 @@ import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeftIcon } from "@heroicons/react/solid";
 import { useNavigate } from "react-router-dom";
-
-const AnimatedBackground = () => {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-
-    let animationFrame;
-
-    const generateRandomLine = () => {
-      const randomLines = [
-        "const user = 'Jouttane Anass';",
-        "let code = 'Hello World!';",
-        "function animateCode() { return true; }",
-        "const react = require('react');",
-        "let state = useState();",
-        "const canvas = document.querySelector('canvas');",
-        "if (window.innerWidth < 800) { console.log('Mobile'); }",
-      ];
-      return randomLines[Math.floor(Math.random() * randomLines.length)];
-    };
-
-    const draw = () => {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      const time = Date.now() / 1000;
-      const lineColor = "rgba(0, 255, 255, 0.3)";
-
-      const totalLines = 150;
-
-      for (let i = 0; i < totalLines; i++) {
-        const yPos = Math.random() * canvas.height;
-        const xOffset = (time * 2 + i * 30) % canvas.width;
-        const codeLine = generateRandomLine();
-
-        ctx.font = "16px monospace";
-        ctx.fillStyle = lineColor;
-        ctx.fillText(codeLine, xOffset, yPos);
-      }
-
-      animationFrame = requestAnimationFrame(draw);
-    };
-
-    draw();
-
-    return () => {
-      cancelAnimationFrame(animationFrame);
-      window.removeEventListener("resize", resizeCanvas);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        zIndex: -1,
-        pointerEvents: "none",
-      }}
-    />
-  );
-};
-
+import AnimatedBackground from "../../AnimatedBackground/AnimatedBackground";
+import "./CertificationsList.css";
 const getSequenceDelay = (index) => index * 0.2;
 
 const CertificationsList = () => {
@@ -138,7 +63,7 @@ const CertificationsList = () => {
               return (
                 <motion.div
                   key={certification._id}
-                  className="flex mb-6"
+                  className="flex flex-col lg:flex-row mb-6"
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{
@@ -149,12 +74,15 @@ const CertificationsList = () => {
                   viewport={{ once: true, amount: 0.5 }}
                 >
                   <div
-                    className={`flex ${
-                      isOdd ? "flex-row-reverse" : "flex-row"
+                    className={`flex flex-col ${
+                      isOdd ? "lg:flex-row-reverse" : "lg:flex-row"
                     } items-center space-x-6 w-full`}
                   >
+                    {/* Parte immagine */}
                     <motion.div
-                      className={`w-1/3 ${isOdd ? "ml-auto" : "mr-auto"}`}
+                      className={`w-full lg:w-1/3 ${
+                        isOdd ? "lg:ml-auto" : "lg:mr-auto"
+                      } mb-4 lg:mb-0`}
                       initial={{ opacity: 0, x: isOdd ? 50 : -50 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{
@@ -167,7 +95,7 @@ const CertificationsList = () => {
                       <img
                         src={certification.file}
                         alt={certification.name}
-                        className="object-cover mb-4 rounded-md cursor-pointer"
+                        className="object-cover rounded-md cursor-pointer"
                         onClick={() => openImageModal(certification.file)}
                       />
                     </motion.div>
@@ -189,7 +117,7 @@ const CertificationsList = () => {
                       }}
                     >
                       <motion.h3
-                        className="text-xl font-semibold mb-4 text-white"
+                        className="text-2xl sm:text-1xl md:text-5xl lg:text-4xl xl:text-4xl leading-relaxed font-semibold mb-4 text-white"
                         variants={{
                           hidden: { opacity: 0, y: 20 },
                           visible: { opacity: 1, y: 0 },
@@ -198,7 +126,7 @@ const CertificationsList = () => {
                         {certification.name}
                       </motion.h3>
                       <motion.p
-                        className="text-white mb-4"
+                        className="text-white mb-4 text-2xl sm:text-1xl md:text-3xl lg:text-3xl xl:text-3xl leading-relaxed"
                         variants={{
                           hidden: { opacity: 0, y: 20 },
                           visible: { opacity: 1, y: 0 },
@@ -207,7 +135,7 @@ const CertificationsList = () => {
                         {certification.description}
                       </motion.p>
                       <motion.p
-                        className="font-medium text-white"
+                        className="text-2xl sm:text-1xl md:text-2xl lg:text-2xl xl:text-2xl leading-relaxed font-medium text-white"
                         variants={{
                           hidden: { opacity: 0, y: 20 },
                           visible: { opacity: 1, y: 0 },
@@ -228,10 +156,15 @@ const CertificationsList = () => {
           </p>
         )}
       </div>
-
       {isImageModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-          <div className="relative bg-white p-4 rounded-md">
+          <motion.div
+            className="relative bg-white p-4 rounded-md"
+            initial={window.innerWidth < 768 ? { opacity: 0 } : {}}
+            animate={window.innerWidth < 768 ? { opacity: 1 } : {}}
+            exit={window.innerWidth < 768 ? { opacity: 0 } : {}}
+            transition={{ duration: 0.3 }}
+          >
             <button
               onClick={closeImageModal}
               className="absolute top-0 right-0 p-2 text-xl text-black"
@@ -243,7 +176,7 @@ const CertificationsList = () => {
               alt="Enlarged"
               className="max-w-full max-h-[90vh] object-contain"
             />
-          </div>
+          </motion.div>
         </div>
       )}
     </div>

@@ -7,6 +7,7 @@ import AnimatedBackground from "../../AnimatedBackground/AnimatedBackground";
 import About from "../AboutME/AboutMe";
 import Skills from "../Skills/Skills";
 import Projects from "../../Projects/Projects";
+import CopyrightText from "../CopyrightText/CopyrightText";
 
 const HomePage = () => {
   const [activeSection, setActiveSection] = useState(null);
@@ -191,6 +192,7 @@ const HomePage = () => {
           )}
         </AnimatePresence>
       </div>
+      <CopyrightText />
     </div>
   );
 };
